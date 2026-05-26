@@ -42,6 +42,7 @@ class FishingScoreSensor(CoordinatorEntity[FishingScoreCoordinator], SensorEntit
         spot_name = entry.data[CONF_NAME].strip().lower().replace(" ", "_")
         fish = entry.data[CONF_FISH]
         self._attr_unique_id = f"{entry.entry_id}_{fish}_score"
+        self._attr_name = f"{spot_name} {fish} fishing score"
         self._attr_entity_id = f"sensor.{spot_name}_{fish}_fishing_score"
 
     @property
@@ -84,8 +85,11 @@ class FishingBestWindowSensor(CoordinatorEntity[FishingScoreCoordinator], Sensor
 
     def __init__(self, coordinator: FishingScoreCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator)
+        spot_name = entry.data[CONF_NAME].strip().lower().replace(" ", "_")
         fish = entry.data[CONF_FISH]
         self._attr_unique_id = f"{entry.entry_id}_{fish}_best_window"
+        self._attr_name = f"{spot_name} {fish} best fishing window"
+        self._attr_entity_id = f"sensor.{spot_name}_{fish}_best_fishing_window"
 
     @property
     def native_value(self):
@@ -126,8 +130,11 @@ class FishingLevelSensor(CoordinatorEntity[FishingScoreCoordinator], SensorEntit
 
     def __init__(self, coordinator: FishingScoreCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator)
+        spot_name = entry.data[CONF_NAME].strip().lower().replace(" ", "_")
         fish = entry.data[CONF_FISH]
         self._attr_unique_id = f"{entry.entry_id}_{fish}_level"
+        self._attr_name = f"{spot_name} {fish} fishing level"
+        self._attr_entity_id = f"sensor.{spot_name}_{fish}_fishing_level"
 
     @property
     def native_value(self):
@@ -158,8 +165,11 @@ class FishingNextGoodWindowSensor(CoordinatorEntity[FishingScoreCoordinator], Se
 
     def __init__(self, coordinator: FishingScoreCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator)
+        spot_name = entry.data[CONF_NAME].strip().lower().replace(" ", "_")
         fish = entry.data[CONF_FISH]
         self._attr_unique_id = f"{entry.entry_id}_{fish}_next_good_window"
+        self._attr_name = f"{spot_name} {fish} next good window"
+        self._attr_entity_id = f"sensor.{spot_name}_{fish}_next_good_window"
 
     @property
     def native_value(self):
