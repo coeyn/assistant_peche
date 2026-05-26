@@ -1,0 +1,11 @@
+﻿{
+  "domain": "fishing_score_assistant",
+  "name": "Fishing Score Assistant",
+  "codeowners": ["@coeyn22"],
+  "config_flow": true,
+  "documentation": "https://github.com/coeyn22/fishing-score-assistant",
+  "issue_tracker": "https://github.com/coeyn22/fishing-score-assistant/issues",
+  "iot_class": "local_polling",
+  "version": "0.1.0",
+  "requirements": []
+}

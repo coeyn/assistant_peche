@@ -1,0 +1,21 @@
+﻿{
+  "title": "Fishing Score Assistant",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure Fishing Score Assistant",
+        "description": "Choose your fishing spot and weather source.",
+        "data": {
+          "name": "Spot name",
+          "weather_entity": "Weather entity",
+          "forecast_type": "Forecast type",
+          "body_type": "Water body type",
+          "fish": "Target fish"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This spot is already configured."
+    }
+  }
+}

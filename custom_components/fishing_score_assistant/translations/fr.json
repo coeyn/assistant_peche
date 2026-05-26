@@ -1,0 +1,27 @@
+﻿{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurer Fishing Score Assistant",
+        "description": "Choisissez votre spot et la source meteo.",
+        "data": {
+          "name": "Nom du spot",
+          "weather_entity": "Entite meteo",
+          "forecast_type": "Type de prevision",
+          "body_type": "Type de plan d'eau",
+          "fish": "Poisson cible"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Ce spot est deja configure."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "fishing_score": {
+        "name": "Score de peche"
+      }
+    }
+  }
+}
