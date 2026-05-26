@@ -6,11 +6,34 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant
+from homeassistant.util import dt as dt_util
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import ATTR_ERROR, DOMAIN, CONF_FISH
 from .coordinator import FishingScoreCoordinator
+
+DAY_FR = {
+    "Mon": "Lun",
+    "Tue": "Mar",
+    "Wed": "Mer",
+    "Thu": "Jeu",
+    "Fri": "Ven",
+    "Sat": "Sam",
+    "Sun": "Dim",
+}
+
+
+def _format_fr_datetime(value: str | None) -> str | None:
+    """Format ISO datetime to a compact French-like string."""
+    if not value:
+        return None
+    dt = dt_util.parse_datetime(value)
+    if dt is None:
+        return value
+    local_dt = dt_util.as_local(dt)
+    day = DAY_FR.get(local_dt.strftime("%a"), local_dt.strftime("%a"))
+    return f"{day} {local_dt.strftime('%d/%m %H:%M')}"
 
 
 async def async_setup_entry(
@@ -101,7 +124,12 @@ class FishingBestWindowSensor(CoordinatorEntity[FishingScoreCoordinator], Sensor
         end = best_window.get("end")
         if not start or not end:
             return None
-        return f"{start} -> {end}"
+        start_fmt = _format_fr_datetime(start)
+        end_dt = dt_util.parse_datetime(end)
+        end_fmt = dt_util.as_local(end_dt).strftime("%H:%M") if end_dt else end
+        if not start_fmt or not end_fmt:
+            return None
+        return f"{start_fmt} -> {end_fmt}"
 
     @property
     def available(self) -> bool:
@@ -116,6 +144,8 @@ class FishingBestWindowSensor(CoordinatorEntity[FishingScoreCoordinator], Sensor
             "best_window_start": best_window.get("start"),
             "best_window_end": best_window.get("end"),
             "best_window_score": best_window.get("score"),
+            "best_window_start_formatted": _format_fr_datetime(best_window.get("start")),
+            "best_window_end_formatted": _format_fr_datetime(best_window.get("end")),
         }
         if data.get(ATTR_ERROR):
             attrs[ATTR_ERROR] = data[ATTR_ERROR]
@@ -176,7 +206,7 @@ class FishingNextGoodWindowSensor(CoordinatorEntity[FishingScoreCoordinator], Se
         data = self.coordinator.data or {}
         if data.get(ATTR_ERROR):
             return None
-        return data.get("next_good_window")
+        return _format_fr_datetime(data.get("next_good_window"))
 
     @property
     def available(self) -> bool:
@@ -186,7 +216,11 @@ class FishingNextGoodWindowSensor(CoordinatorEntity[FishingScoreCoordinator], Se
     @property
     def extra_state_attributes(self) -> dict:
         data = self.coordinator.data or {}
-        attrs = {"threshold": 6.5}
+        attrs = {
+            "threshold": 6.5,
+            "next_good_window_raw": data.get("next_good_window"),
+            "next_good_window_formatted": _format_fr_datetime(data.get("next_good_window")),
+        }
         if data.get(ATTR_ERROR):
             attrs[ATTR_ERROR] = data[ATTR_ERROR]
         return attrs
